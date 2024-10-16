@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="main.css" />
+    <title>Document</title>
+  </head>
+  <body class="h-full text-xl">
+    <div class="container items-center mx-auto">
+      <div class="flex flex-col gap-4 p-4">
+        <input
+          class="w-full focus:shadow-lg outline-none transition-all rounded-md px-4 py-2 shadow-sm"
+          type="text"
+          oninput="handl()"
+          id="donable"
+          placeholder="دنباله => 1,2,3"
+        />
+        <input
+          class="w-full focus:shadow-lg outline-none transition-all rounded-md px-4 py-2 shadow-sm"
+          type="text"
+          oninput="handl()"
+          id="jomle"
+          placeholder="n"
+        />
+        <select
+          onchange="handl()"
+          class="w-full focus:shadow-lg outline-none transition-all rounded-md px-4 py-2 shadow-sm"
+        >
+          <option value="A">جمله</option>
+          <option value="S">جمع</option>
+        </select>
+      </div>
+      <div class="text-center text-lg opacity-80" id="answer">
+        فیلد ها را با اعداد مناسب پر کنید.
+      </div>
+    </div>
+    <script>
+      const dom = document;
+      const donable = dom.querySelector("#donable");
+      const jomle = dom.querySelector("#jomle");
+      const answer = dom.querySelector("#answer");
+      const select = dom.querySelector("select");
+
+      function getA(A, n, AType = "p", type = "S") {
+        let arr = A.replace(/,$/, "").split(","),
+          d,
+          result,
+          gl;
+        arr = arr.map((a) => (a = Number(a)));
+        if (AType === "p") d = arr[1] - arr[0];
+        else d = arr[1] / arr[0];
+        let a1 = arr[0];
+        if (type === "S") {
+          if (AType === "p") result = (n / 2) * (2 * a1 + (n - 1) * d);
+          else result = (n / 2) * (2 * a1 + (n - 1) * d);
+        } else {
+          if (AType === "p") result = a1 + (n - 1) * d;
+          else result = a1 + (n - 1) * d;
+        }
+        if (!result && result !== 0) return "";
+        if (type !== "S") gl = -d + a1;
+        else gl = 2 * a1 - d;
+        if (gl != 0 && gl > -1) gl = `+${gl}`;
+        if (gl === 0) gl = "";
+        if (type !== "S") gl = `${d != 1 ? d : ""}n${gl}`;
+        else gl = `n/2(${d != 1 ? d : ""}n${gl})`;
+        return `<p>برابر با = <span dir="ltr">${result}</span></p><p>جمله عمومی = <span dir="ltr">${gl}</span></p>`;
+      }
+      function handl() {
+        if (!donable.value || !jomle.value) {
+          answer.textContent = "فیلد ها را با اعداد مناسب پر کنید.";
+          return;
+        }
+        answer.innerHTML = getA(donable.value, jomle.value, "p", select.value);
+      }
+    </script>
+  </body>
+</html>
